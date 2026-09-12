@@ -1,12 +1,8 @@
 <p align="center">
-  <img src="assets/gavel-logo-tagline.png" alt="Gavel — evidence-based validation for agentic data pipelines" width="220">
+  <img src="assets/gavel-logo-tagline.png" alt="Gavel — collect evidence, compare to golden, emit verdict" width="480">
 </p>
 
-<h1 align="center">Gavel MCP</h1>
-
 <p align="center"><em>Pronounced <strong>GAV-əl</strong> — like a judge’s gavel (two syllables, stress on the first).</em></p>
-
-<h3 align="center">Collect evidence. Compare to golden. Emit verdict.</h3>
 
 <p align="center">
   Declarative sandbox evals for agent-built data pipelines. Golden vs candidate datasets,
@@ -15,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Abhishek249/proofline-mcp/actions/workflows/ci.yml"><img src="https://github.com/Abhishek249/proofline-mcp/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/Abhishek249/gavel-mcp/actions/workflows/ci.yml"><img src="https://github.com/Abhishek249/gavel-mcp/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-16a085" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/MCP-stdio-6f42c1" alt="MCP stdio">
   <img src="https://img.shields.io/badge/python-3.11+-3776ab" alt="Python 3.11+">
@@ -26,8 +22,7 @@
 Prerequisites: **Python 3.11+**. Live DevInt validation also needs network access to `10.51.50.91`.
 
 ```bash
-# GitHub repo: rename to gavel-mcp in Settings → General (or clone legacy URL into gavel-mcp/)
-git clone https://github.com/Abhishek249/proofline-mcp.git gavel-mcp
+git clone https://github.com/Abhishek249/gavel-mcp.git
 cd gavel-mcp
 make install          # creates .venv, copies .env.example → .env
 make smoke            # lint + 22 tests + MCP prove + offline sandboxes — no secrets
@@ -116,6 +111,9 @@ manual_report_id
 
 ```
 gavel-mcp/
+├── assets/
+│   ├── gavel-logo-tagline.png  # README banner
+│   └── gavel-logo.png          # square icon (social preview)
 ├── sandboxes/
 │   ├── manual-report-in1290/   # Proof #2 golden + metrics
 │   └── q2755-dual-write/       # PH-2683-style shape drift
