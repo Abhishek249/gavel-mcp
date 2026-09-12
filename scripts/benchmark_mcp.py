@@ -45,7 +45,14 @@ async def benchmark() -> dict:
         await session.initialize()
         tools = await session.list_tools()
         tool_names = sorted(tool.name for tool in tools.tools)
-        required_tools = {"validate_candidate_pipeline", "validate_geospatial_run"}
+        required_tools = {
+            "validate_candidate_pipeline",
+            "validate_geospatial_run",
+            "list_sandbox_definitions",
+            "validate_sandbox_run",
+            "collect_manual_report_candidate_row",
+            "validate_manual_report_live",
+        }
         assert required_tools <= set(tool_names)
 
         for row_count in ROW_COUNTS:

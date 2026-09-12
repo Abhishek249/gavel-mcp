@@ -26,6 +26,7 @@ class ValidationReport(BaseModel):
     candidate_faults: list[str]
     status: CheckStatus
     checks: list[CheckResult]
+    context: dict[str, Any] = Field(default_factory=dict)
     generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     @property

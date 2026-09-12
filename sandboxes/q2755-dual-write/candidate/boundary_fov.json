@@ -1,0 +1,9 @@
+{
+  "rows": [
+    {
+      "campaign_boundary_id": "3df9572e-73bf-45e6-86eb-fcc2e30d7ee0",
+      "aggregated_fov_wkt": "POLYGON((10 0, 10 100, 100 100, 100 0, 10 0))",
+      "gap_count": 1
+    }
+  ]
+}

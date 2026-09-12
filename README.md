@@ -25,12 +25,14 @@ and returns a structured evidence report: pass/fail, expected value, actual valu
 context. An agent can call it before accepting a generated pipeline change, approving a deployment,
 or reporting that a run is healthy.
 
-The server currently exposes two tools:
+The server exposes four MCP tools:
 
 | MCP tool | Purpose |
 |---|---|
 | `validate_candidate_pipeline` | Reproducible reference-versus-candidate validation using the public taxi-shaped benchmark |
 | `validate_geospatial_run` | Domain-neutral semantic checks from orchestrator, worker, database, and spatial evidence |
+| `list_sandbox_definitions` | Discover declarative sandbox evals (components, golden/candidate datasets, metrics) |
+| `validate_sandbox_run` | Run golden-vs-candidate metrics for a named sandbox spec |
 
 ## 2. Why does it exist?
 
@@ -147,8 +149,35 @@ Example Cursor-compatible MCP configuration:
 }
 ```
 
-Restart the MCP client after changing its configuration. It should discover
-`validate_candidate_pipeline` and `validate_geospatial_run`.
+Restart the MCP client after changing its configuration. It should discover all four tools.
+
+### Sandbox eval platform (v0.2)
+
+Define a sandbox once under `sandboxes/<name>/sandbox.yaml`:
+
+- **Components** — declare Postgres, SQL Server, Dagster, WO, S3, … as the evaluation boundary
+- **Golden + candidate datasets** — JSON snapshots (live adapters on the roadmap)
+- **Metrics** — deterministic rubric such as `jaccard` on `golden.geom_wkt` vs `candidate.geom_wkt`
+
+```bash
+proofline list-sandboxes
+proofline sandbox manual-report-in1290 \
+  --params '{"candidate_key":"f6b07a32-ff8b-45b2-a784-cd38ff2d7213"}'
+proofline sandbox q2755-dual-write \
+  --params '{"candidate_key":"3df9572e-73bf-45e6-86eb-fcc2e30d7ee0"}'
+```
+
+See [`docs/sandbox-platform.md`](docs/sandbox-platform.md) for the full spec format.
+
+### Live DevInt manual report validation (v0.3)
+
+```bash
+pip install -e ".[live]"
+export PGHOST=10.51.50.91 PGDATABASE=pcubed_pro PGUSER=admin PGPASSWORD='...'
+
+proofline validate-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213
+./scripts/validate_manual_report_devint.sh f6b07a32-ff8b-45b2-a784-cd38ff2d7213
+```
 
 Run the public proof and benchmark:
 
@@ -204,8 +233,9 @@ pipelines. Validation against external, real-world geospatial infrastructure is 
 - [x] Controlled fault injection
 - [x] Independent GitHub Actions proof and benchmark
 - [x] Reusable geospatial evidence contract
-- [ ] Real public NYC TLC Parquet adapter
-- [ ] Pluggable PostgreSQL and orchestration adapters
+- [x] Declarative sandbox evals (golden/candidate + metric DSL)
+- [x] Live DevInt manual-report collector (Postgres + WO + Dagster)
+- [ ] SQL Server adapter for PH-2683 dual-write
 - [ ] Signed evidence bundles and OpenTelemetry traces
 - [ ] Policy-gated pull-request integration
 - [ ] Empirical evaluation and research paper

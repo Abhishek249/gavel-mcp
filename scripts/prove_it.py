@@ -27,8 +27,15 @@ async def prove() -> dict:
     async with stdio_client(server) as (read, write), ClientSession(read, write) as session:
         await session.initialize()
         tools = await session.list_tools()
-        tool_names = [tool.name for tool in tools.tools]
-        assert set(tool_names) == {"validate_candidate_pipeline", "validate_geospatial_run"}
+        tool_names = {tool.name for tool in tools.tools}
+        assert {
+            "validate_candidate_pipeline",
+            "validate_geospatial_run",
+            "list_sandbox_definitions",
+            "validate_sandbox_run",
+            "collect_manual_report_candidate_row",
+            "validate_manual_report_live",
+        } <= tool_names
 
         for name, (faults, expected_status, required_failures) in SCENARIOS.items():
             response = await session.call_tool(
@@ -92,10 +99,31 @@ async def prove() -> dict:
             }
         )
 
+        response = await session.call_tool(
+            "validate_sandbox_run",
+            {
+                "sandbox": "manual-report-in1290",
+                "params": {"candidate_key": "f6b07a32-ff8b-45b2-a784-cd38ff2d7213"},
+            },
+        )
+        assert not response.isError
+        assert response.content and hasattr(response.content[0], "text")
+        report = json.loads(response.content[0].text)
+        assert report["status"] == "pass"
+        observed.append(
+            {
+                "scenario": "sandbox_manual_report_in1290",
+                "expected": "pass",
+                "actual": report["status"],
+                "failed_checks": report.get("failed_checks", []),
+                "run_id": report["run_id"],
+            }
+        )
+
     return {
         "proof": "PASS",
         "boundary": "MCP stdio client -> Proofline MCP server -> validation engine",
-        "mcp_tools": tool_names,
+        "mcp_tools": sorted(tool_names),
         "scenarios_verified": len(observed),
         "results": observed,
     }

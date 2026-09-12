@@ -57,8 +57,8 @@ def validate_geospatial_evidence(evidence: GeospatialRunEvidence) -> ValidationR
         ),
         _check(
             "worker_completed",
-            evidence.worker_status.upper() == "COMPLETED",
-            "COMPLETED",
+            evidence.worker_status.upper() in {"COMPLETED", "SUCCEEDED", "SUCCESS"},
+            "COMPLETED|SUCCEEDED",
             evidence.worker_status,
         ),
         _check(

@@ -1,0 +1,45 @@
+name: q2755-dual-write
+version: "1"
+description: >
+  PH-2683 pattern — compare NA ProdStg golden AutoFOV shape vs PCP QA candidate.
+  Components declare the sandbox boundary; datasets are snapshot JSON for v1.
+
+components:
+  sql_server_na:
+    type: sqlserver
+    description: NA ProdStg ReportFieldOfViewAggregated source
+  postgres_qa:
+    type: postgres
+    description: PCP QA boundary_result.aggregated_fov_shape
+
+datasets:
+  golden:
+    source: file
+    path: golden/boundary_fov.json
+    key: campaign_boundary_id
+  candidate:
+    source: file
+    path: candidate/boundary_fov.json
+    key: campaign_boundary_id
+
+align:
+  golden_key: campaign_boundary_id
+  candidate_key: campaign_boundary_id
+
+metrics:
+  - name: aggregated_fov_jaccard
+    golden: golden.aggregated_fov_wkt
+    candidate: candidate.aggregated_fov_wkt
+    fn: jaccard
+    threshold: 0.95
+
+  - name: aggregated_fov_area_ratio
+    golden: golden.aggregated_fov_wkt
+    candidate: candidate.aggregated_fov_wkt
+    fn: area_ratio
+    tolerance: 0.05
+
+  - name: gap_count_exact
+    golden: golden.gap_count
+    candidate: candidate.gap_count
+    fn: exact

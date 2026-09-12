@@ -6,4 +6,7 @@ __pycache__/
 .coverage
 htmlcov/
 dist/
+reports/
+*.egg-info/
+benchmark-report.json
 

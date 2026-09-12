@@ -1,0 +1,13 @@
+{
+  "rows": [
+    {
+      "manual_report_id": "f6b07a32-ff8b-45b2-a784-cd38ff2d7213",
+      "driving_session_count": 3,
+      "autofov_tile_count": 4,
+      "autofov_postgres_written": true,
+      "aggregated_fov_wkt": "POLYGON((0 0, 0 50, 50 50, 50 0, 0 0))",
+      "gap_count": 1,
+      "lisa_orchestration_status": "SUCCESS"
+    }
+  ]
+}
