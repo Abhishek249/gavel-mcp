@@ -1,15 +1,17 @@
 <p align="center">
-  <img src="assets/proofline-logo-tagline.png" alt="Proofline — evidence-based validation for agentic data pipelines" width="220">
+  <img src="assets/gavel-logo-tagline.png" alt="Gavel — evidence-based validation for agentic data pipelines" width="220">
 </p>
 
-<h1 align="center">Proofline MCP</h1>
+<h1 align="center">Gavel MCP</h1>
 
-<h3 align="center">Prove your pipeline data landed — not just that the job turned green.</h3>
+<p align="center"><em>Pronounced <strong>GAV-əl</strong> — like a judge’s gavel (two syllables, stress on the first).</em></p>
+
+<h3 align="center">Collect evidence. Compare to golden. Emit verdict.</h3>
 
 <p align="center">
   Declarative sandbox evals for agent-built data pipelines. Golden vs candidate datasets,
   deterministic metrics (Jaccard, exact, area ratio), and a local MCP server your coding agent can call.
-  <strong>The LLM decides when to validate; Proofline decides pass or fail.</strong>
+  <strong>The LLM decides when to validate; Gavel decides pass or fail.</strong>
 </p>
 
 <p align="center">
@@ -24,10 +26,11 @@
 Prerequisites: **Python 3.11+**. Live DevInt validation also needs network access to `10.51.50.91`.
 
 ```bash
-git clone https://github.com/Abhishek249/proofline-mcp.git
-cd proofline-mcp
+# GitHub repo: rename to gavel-mcp in Settings → General (or clone legacy URL into gavel-mcp/)
+git clone https://github.com/Abhishek249/proofline-mcp.git gavel-mcp
+cd gavel-mcp
 make install          # creates .venv, copies .env.example → .env
-make smoke            # lint + 21 tests + MCP prove + offline sandboxes — no secrets
+make smoke            # lint + 22 tests + MCP prove + offline sandboxes — no secrets
 ```
 
 **Keys, honestly:**
@@ -36,7 +39,7 @@ make smoke            # lint + 21 tests + MCP prove + offline sandboxes — no s
 |------|-------------|
 | `make smoke`, `pytest`, offline sandboxes | **None** — runs fully local |
 | Live manual-report collect/validate | **`PGPASSWORD`** (+ optional WO/Dagster URLs; defaults to DevInt `.91`) |
-| MCP in Cursor | Point at `.venv/bin/proofline-mcp` — see [`docs/mcp-setup.md`](docs/mcp-setup.md) |
+| MCP in Cursor | Point at `.venv/bin/gavel-mcp` — see [`docs/mcp-setup.md`](docs/mcp-setup.md) |
 | SQL Server dual-write (PH-2683) | **Not wired yet** — use offline `q2755-dual-write` sandbox |
 
 ```bash
@@ -51,7 +54,8 @@ make validate-mr
 
 | Version | Focus | Try it |
 |---------|-------|--------|
-| **v0.1** | Taxi benchmark + geospatial evidence MCP tools | `proofline taxi` |
+| **v0.4** | Renamed from Proofline → **Gavel** (`gavel` CLI, `gavel-mcp` server) | `make smoke` |
+| **v0.1** | Taxi benchmark + geospatial evidence MCP tools | `gavel taxi` |
 | **v0.2** | Sandbox spec + golden/candidate + metric DSL | `make sandbox-offline` |
 | **v0.3** | Live DevInt collector (Postgres + WO + Dagster) | `make validate-mr` |
 
@@ -111,13 +115,13 @@ manual_report_id
 ## 📂 Project structure
 
 ```
-proofline-mcp/
+gavel-mcp/
 ├── sandboxes/
 │   ├── manual-report-in1290/   # Proof #2 golden + metrics
 │   └── q2755-dual-write/       # PH-2683-style shape drift
-├── src/proofline/
+├── src/gavel/
 │   ├── server.py               # MCP stdio server (6 tools)
-│   ├── cli.py                  # proofline CLI
+│   ├── cli.py                  # gavel CLI
 │   ├── sandbox/                # spec loader, metrics, runner
 │   ├── adapters/               # Postgres, WO, Dagster HTTP clients
 │   └── collectors/             # manual_report evidence composer
@@ -153,10 +157,10 @@ make lint              # ruff
 CLI equivalents:
 
 ```bash
-proofline list-sandboxes
-proofline smoke
-proofline sandbox manual-report-in1290 --params '{"candidate_key":"f6b07a32-..."}'
-proofline validate-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213
+gavel list-sandboxes
+gavel smoke
+gavel sandbox manual-report-in1290 --params '{"candidate_key":"f6b07a32-..."}'
+gavel validate-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213
 ```
 
 ## 🛠️ Troubleshooting
@@ -165,7 +169,7 @@ proofline validate-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213
 - **`manual_report not found`**: wrong UUID or MR deleted from DevInt.
 - **Live PASS but you expected FAIL**: golden snapshot may be stale — capture a new golden or compare different MR.
 - **MCP tools missing in Cursor**: run `make mcp-config`, use absolute paths, restart Cursor.
-- **WO SUCCEEDED but geospatial check failed**: Proofline now accepts `SUCCEEDED`; re-run `make smoke`.
+- **WO SUCCEEDED but geospatial check failed**: Gavel now accepts `SUCCEEDED`; re-run `make smoke`.
 - **Dagster poll fails**: use `adapter_run_id` from WO job, not WO `run_id`.
 
 ## 📊 Taxi benchmark (v0.1)

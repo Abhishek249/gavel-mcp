@@ -1,16 +1,16 @@
-# Cursor MCP setup (local Proofline server)
+# Cursor MCP setup (local Gavel server)
 
 ## 1. Install and smoke-test offline
 
 ```bash
-cd proofline-mcp
+cd gavel-mcp
 make install
 make smoke
 ```
 
 No credentials required for `make smoke`.
 
-## 2. Add Proofline to Cursor
+## 2. Add Gavel to Cursor
 
 From the repo root:
 
@@ -23,10 +23,10 @@ Copy the printed JSON into your Cursor MCP config (`~/.cursor/mcp.json` or proje
 ```json
 {
   "mcpServers": {
-    "proofline": {
-      "command": "/absolute/path/proofline-mcp/.venv/bin/proofline-mcp",
+    "gavel": {
+      "command": "/absolute/path/gavel-mcp/.venv/bin/gavel-mcp",
       "env": {
-        "PROOFLINE_SANDBOX_DIR": "/absolute/path/proofline-mcp/sandboxes"
+        "GAVEL_SANDBOX_DIR": "/absolute/path/gavel-mcp/sandboxes"
       }
     }
   }
@@ -48,14 +48,14 @@ Add Postgres and orchestration env vars to the MCP server block:
 
 ```json
 "env": {
-  "PROOFLINE_SANDBOX_DIR": "/absolute/path/proofline-mcp/sandboxes",
+  "GAVEL_SANDBOX_DIR": "/absolute/path/gavel-mcp/sandboxes",
   "PGHOST": "10.51.50.91",
   "PGPORT": "5432",
   "PGDATABASE": "pcubed_pro",
   "PGUSER": "admin",
   "PGPASSWORD": "your-devint-password",
-  "PROOFLINE_WO_URL": "http://10.51.50.91:8001",
-  "PROOFLINE_DAGSTER_URL": "http://10.51.50.91:3001"
+  "GAVEL_WO_URL": "http://10.51.50.91:8001",
+  "GAVEL_DAGSTER_URL": "http://10.51.50.91:3001"
 }
 ```
 

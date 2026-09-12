@@ -1,4 +1,4 @@
-from proofline.adapters.http_clients import (
+from gavel.adapters.http_clients import (
     dagster_graphql,
     dagster_materialization_metadata,
     dagster_run_status,
@@ -10,7 +10,7 @@ from proofline.adapters.http_clients import (
     http_json,
     list_wo_jobs,
 )
-from proofline.adapters.postgres import PostgresSettings, fetch_rows
+from gavel.adapters.postgres import PostgresSettings, fetch_rows
 
 __all__ = [
     "PostgresSettings",

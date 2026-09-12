@@ -8,12 +8,18 @@ from typing import Any
 
 
 def default_wo_url() -> str:
-    return os.environ.get("PROOFLINE_WO_URL") or os.environ.get("DEVINT_WO_URL") or "http://10.51.50.91:8001"
+    return (
+        os.environ.get("GAVEL_WO_URL")
+        or os.environ.get("PROOFLINE_WO_URL")
+        or os.environ.get("DEVINT_WO_URL")
+        or "http://10.51.50.91:8001"
+    )
 
 
 def default_dagster_url() -> str:
     return (
-        os.environ.get("PROOFLINE_DAGSTER_URL")
+        os.environ.get("GAVEL_DAGSTER_URL")
+        or os.environ.get("PROOFLINE_DAGSTER_URL")
         or os.environ.get("DEVINT_DAGSTER_URL")
         or "http://10.51.50.91:3001"
     )

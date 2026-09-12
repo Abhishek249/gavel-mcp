@@ -4,10 +4,10 @@ import hashlib
 import json
 from collections.abc import Iterable
 
-from proofline.fixtures import make_taxi_trips
-from proofline.models import CheckStatus, ValidationReport
-from proofline.pipelines import candidate_pipeline, reference_pipeline
-from proofline.validators import validate
+from gavel.fixtures import make_taxi_trips
+from gavel.models import CheckStatus, ValidationReport
+from gavel.pipelines import candidate_pipeline, reference_pipeline
+from gavel.validators import validate
 
 
 def run_validation(

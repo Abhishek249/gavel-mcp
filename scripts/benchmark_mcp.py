@@ -1,4 +1,4 @@
-"""Benchmark Proofline through the real MCP protocol boundary."""
+"""Benchmark Gavel through the real MCP protocol boundary."""
 
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ def percentile(values: list[float], probability: float) -> float:
 
 
 async def benchmark() -> dict:
-    server = StdioServerParameters(command=sys.executable, args=["-m", "proofline.server"])
+    server = StdioServerParameters(command=sys.executable, args=["-m", "gavel.server"])
     results: list[dict] = []
     latencies: list[float] = []
 
@@ -120,7 +120,7 @@ async def benchmark() -> dict:
     )
     return {
         "proof": "PASS" if passed else "FAIL",
-        "boundary": "MCP stdio client -> Proofline server -> validation engine",
+        "boundary": "MCP stdio client -> Gavel server -> validation engine",
         "tools_discovered": tool_names,
         "matrix": {"seeds": list(SEEDS), "row_counts": list(ROW_COUNTS)},
         "metrics": metrics,
@@ -130,7 +130,7 @@ async def benchmark() -> dict:
 
 def markdown_summary(report: dict) -> str:
     metrics = report["metrics"]
-    return f"""# Proofline MCP benchmark
+    return f"""# Gavel MCP benchmark
 
 **Result: {report["proof"]}**
 

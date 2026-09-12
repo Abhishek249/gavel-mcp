@@ -1,4 +1,4 @@
-"""Exercise Proofline through its public MCP boundary and verify known outcomes."""
+"""Exercise Gavel through its public MCP boundary and verify known outcomes."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ SCENARIOS = {
 
 
 async def prove() -> dict:
-    server = StdioServerParameters(command=sys.executable, args=["-m", "proofline.server"])
+    server = StdioServerParameters(command=sys.executable, args=["-m", "gavel.server"])
     observed: list[dict] = []
 
     async with stdio_client(server) as (read, write), ClientSession(read, write) as session:
@@ -122,7 +122,7 @@ async def prove() -> dict:
 
     return {
         "proof": "PASS",
-        "boundary": "MCP stdio client -> Proofline MCP server -> validation engine",
+        "boundary": "MCP stdio client -> Gavel MCP server -> validation engine",
         "mcp_tools": sorted(tool_names),
         "scenarios_verified": len(observed),
         "results": observed,

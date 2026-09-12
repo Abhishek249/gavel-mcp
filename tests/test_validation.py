@@ -1,7 +1,7 @@
 import pytest
 
-from proofline.models import CheckStatus
-from proofline.runner import run_validation
+from gavel.models import CheckStatus
+from gavel.runner import run_validation
 
 
 def test_clean_pipeline_passes() -> None:

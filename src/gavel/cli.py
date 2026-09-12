@@ -6,10 +6,10 @@ import os
 import sys
 from pathlib import Path
 
-from proofline.collectors.manual_report import collect_manual_report_candidate
-from proofline.runner import run_validation
-from proofline.sandbox.loader import list_sandboxes
-from proofline.sandbox.runner import run_sandbox_validation
+from gavel.collectors.manual_report import collect_manual_report_candidate
+from gavel.runner import run_validation
+from gavel.sandbox.loader import list_sandboxes
+from gavel.sandbox.runner import run_sandbox_validation
 
 
 def _load_dotenv(path: Path | None = None) -> None:
@@ -78,7 +78,7 @@ def _cmd_list_sandboxes(_: argparse.Namespace) -> None:
 
 
 def _cmd_smoke(_: argparse.Namespace) -> None:
-    from proofline.models import CheckStatus
+    from gavel.models import CheckStatus
 
     report = run_sandbox_validation(
         "manual-report-in1290",
@@ -99,7 +99,7 @@ def _cmd_smoke(_: argparse.Namespace) -> None:
 
 def main() -> None:
     _load_dotenv()
-    parser = argparse.ArgumentParser(description="Proofline validation CLI")
+    parser = argparse.ArgumentParser(description="Gavel validation CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     taxi = subparsers.add_parser("taxi", help="Run synthetic taxi benchmark validation")

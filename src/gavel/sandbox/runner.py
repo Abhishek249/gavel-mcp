@@ -5,11 +5,11 @@ import json
 from pathlib import Path
 from typing import Any
 
-from proofline.collectors.manual_report import collect_manual_report_candidate
-from proofline.models import CheckResult, CheckStatus, ValidationReport
-from proofline.sandbox.loader import load_dataset_rows, load_sandbox_spec, sandbox_dir_for
-from proofline.sandbox.metrics import evaluate_metric
-from proofline.sandbox.spec import SandboxSpec
+from gavel.collectors.manual_report import collect_manual_report_candidate
+from gavel.models import CheckResult, CheckStatus, ValidationReport
+from gavel.sandbox.loader import load_dataset_rows, load_sandbox_spec, sandbox_dir_for
+from gavel.sandbox.metrics import evaluate_metric
+from gavel.sandbox.spec import SandboxSpec
 
 
 def _maybe_collect_live_candidate(

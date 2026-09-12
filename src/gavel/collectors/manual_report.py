@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from proofline.adapters.http_clients import (
+from gavel.adapters.http_clients import (
     dagster_materialization_metadata,
     dagster_run_status,
     find_dagster_run_by_manual_report,
     find_wo_job_by_name,
 )
-from proofline.adapters.postgres import fetch_rows
+from gavel.adapters.postgres import fetch_rows
 
 MANUAL_REPORT_SQL = """
 SELECT

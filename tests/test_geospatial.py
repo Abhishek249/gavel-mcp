@@ -1,5 +1,5 @@
-from proofline.geospatial import GeospatialRunEvidence, validate_geospatial_evidence
-from proofline.models import CheckStatus
+from gavel.geospatial import GeospatialRunEvidence, validate_geospatial_evidence
+from gavel.models import CheckStatus
 
 
 def healthy_evidence(**overrides) -> GeospatialRunEvidence:

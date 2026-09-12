@@ -3,14 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import patch
 
-from proofline.collectors.manual_report import collect_manual_report_candidate
+from gavel.collectors.manual_report import collect_manual_report_candidate
 
 
-@patch("proofline.collectors.manual_report.find_dagster_run_by_manual_report")
-@patch("proofline.collectors.manual_report.dagster_materialization_metadata")
-@patch("proofline.collectors.manual_report.dagster_run_status")
-@patch("proofline.collectors.manual_report.find_wo_job_by_name")
-@patch("proofline.collectors.manual_report.fetch_rows")
+@patch("gavel.collectors.manual_report.find_dagster_run_by_manual_report")
+@patch("gavel.collectors.manual_report.dagster_materialization_metadata")
+@patch("gavel.collectors.manual_report.dagster_run_status")
+@patch("gavel.collectors.manual_report.find_wo_job_by_name")
+@patch("gavel.collectors.manual_report.fetch_rows")
 def test_collect_manual_report_candidate_merges_sources(
     mock_fetch_rows,
     mock_find_wo,
@@ -55,10 +55,10 @@ def test_collect_manual_report_candidate_merges_sources(
     assert row["collection"]["autofov_adapter_run_id"] == "autofov-run"
 
 
-@patch("proofline.sandbox.runner.collect_manual_report_candidate")
+@patch("gavel.sandbox.runner.collect_manual_report_candidate")
 def test_live_sandbox_validation_uses_collector(mock_collect) -> None:
-    from proofline.models import CheckStatus
-    from proofline.sandbox.runner import run_sandbox_validation
+    from gavel.models import CheckStatus
+    from gavel.sandbox.runner import run_sandbox_validation
 
     manual_report_id = "f6b07a32-ff8b-45b2-a784-cd38ff2d7213"
     mock_collect.return_value = {
@@ -84,7 +84,7 @@ def test_cli_smoke_command() -> None:
     import sys
 
     result = subprocess.run(
-        [sys.executable, "-m", "proofline.cli", "smoke"],
+        [sys.executable, "-m", "gavel.cli", "smoke"],
         cwd=str(Path(__file__).resolve().parents[1]),
         capture_output=True,
         text=True,
@@ -95,8 +95,8 @@ def test_cli_smoke_command() -> None:
 
 
 def test_geospatial_accepts_succeeded_worker_status() -> None:
-    from proofline.geospatial import GeospatialRunEvidence, validate_geospatial_evidence
-    from proofline.models import CheckStatus
+    from gavel.geospatial import GeospatialRunEvidence, validate_geospatial_evidence
+    from gavel.models import CheckStatus
 
     report = validate_geospatial_evidence(
         GeospatialRunEvidence(

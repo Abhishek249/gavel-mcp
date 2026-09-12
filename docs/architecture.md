@@ -1,6 +1,6 @@
-# Proofline architecture
+# Gavel architecture
 
-Proofline separates **judgment** (deterministic eval) from **collection** (adapters that talk to your infra).
+Gavel separates **judgment** (deterministic eval) from **collection** (adapters that talk to your infra).
 
 ```
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
@@ -24,11 +24,11 @@ Proofline separates **judgment** (deterministic eval) from **collection** (adapt
 
 | Layer | Package | Role |
 |-------|---------|------|
-| Spec | `proofline/sandbox/` | Load `sandboxes/*/sandbox.yaml`, align rows, run metrics |
-| Adapters | `proofline/adapters/` | Postgres, WO HTTP, Dagster GraphQL (live only) |
-| Collectors | `proofline/collectors/` | Compose adapter output into candidate evidence rows |
-| Verdict | `proofline/geospatial.py`, `validators.py` | Legacy single-stage checks |
-| MCP | `proofline/server.py` | Expose tools over stdio |
+| Spec | `gavel/sandbox/` | Load `sandboxes/*/sandbox.yaml`, align rows, run metrics |
+| Adapters | `gavel/adapters/` | Postgres, WO HTTP, Dagster GraphQL (live only) |
+| Collectors | `gavel/collectors/` | Compose adapter output into candidate evidence rows |
+| Verdict | `gavel/geospatial.py`, `validators.py` | Legacy single-stage checks |
+| MCP | `gavel/server.py` | Expose tools over stdio |
 
 ## Manual report DevInt flow
 

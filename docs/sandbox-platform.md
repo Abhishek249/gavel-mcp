@@ -1,6 +1,6 @@
 # Sandbox eval platform
 
-Proofline v0.2 adds a declarative **sandbox eval** layer:
+Gavel v0.2 adds a declarative **sandbox eval** layer:
 
 1. **Spec** — declare sandbox components (Postgres, SQL Server, Dagster, WO, S3, …)
 2. **Golden + candidate datasets** — JSON snapshots (v1) or future live adapters
@@ -14,14 +14,14 @@ Agents invoke validation through MCP:
 ## Example: Manual Report IN-1290
 
 ```bash
-proofline sandbox manual-report-in1290 \
+gavel sandbox manual-report-in1290 \
   --params '{"candidate_key":"f6b07a32-ff8b-45b2-a784-cd38ff2d7213"}'
 ```
 
 ## Example: PH-2683 Q2755 dual-write (fails packaged drift candidate)
 
 ```bash
-proofline sandbox q2755-dual-write \
+gavel sandbox q2755-dual-write \
   --params '{"candidate_key":"3df9572e-73bf-45e6-86eb-fcc2e30d7ee0"}'
 ```
 
@@ -83,16 +83,16 @@ Requires DevInt credentials (see `docs/DEVINT-CHEATSHEET.md` in pcp-repos):
 ```bash
 export PGHOST=10.51.50.91 PGPORT=5432 PGDATABASE=pcubed_pro PGUSER=admin
 export PGPASSWORD='...'
-export PROOFLINE_WO_URL=http://10.51.50.91:8001
-export PROOFLINE_DAGSTER_URL=http://10.51.50.91:3001
+export GAVEL_WO_URL=http://10.51.50.91:8001
+export GAVEL_DAGSTER_URL=http://10.51.50.91:3001
 
 pip install -e ".[live]"
 
 # Collect candidate evidence only
-proofline collect-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213 -o /tmp/candidate.json
+gavel collect-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213 -o /tmp/candidate.json
 
 # Collect + validate against golden snapshot (Proof #2)
-proofline validate-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213
+gavel validate-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213
 
 # Or use the helper script
 ./scripts/validate_manual_report_devint.sh f6b07a32-ff8b-45b2-a784-cd38ff2d7213

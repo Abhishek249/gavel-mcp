@@ -5,7 +5,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass, replace
 from datetime import timedelta
 
-from proofline.fixtures import Trip
+from gavel.fixtures import Trip
 
 SUPPORTED_FAULTS = {
     "duplicate_rows",

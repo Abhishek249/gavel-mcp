@@ -19,7 +19,7 @@ jobs:
           cache: pip
       - run: pip install -e ".[dev]"
       - run: ruff check .
-      - run: pytest --cov=proofline --cov-report=term-missing
+      - run: pytest --cov=gavel --cov-report=term-missing
       - name: Prove behavior through MCP
         run: python scripts/prove_it.py
       - name: Benchmark MCP boundary
@@ -27,6 +27,6 @@ jobs:
       - name: Publish benchmark evidence
         uses: actions/upload-artifact@v4
         with:
-          name: proofline-benchmark
+          name: gavel-benchmark
           path: benchmark-report.json
           if-no-files-found: error

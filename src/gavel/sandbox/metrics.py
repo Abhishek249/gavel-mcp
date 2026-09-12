@@ -6,8 +6,8 @@ from typing import Any
 from shapely import wkt
 from shapely.geometry.base import BaseGeometry
 
-from proofline.models import CheckResult, CheckStatus
-from proofline.sandbox.spec import MetricSpec
+from gavel.models import CheckResult, CheckStatus
+from gavel.sandbox.spec import MetricSpec
 
 
 def _resolve_field(side: str, field_ref: str, row: dict[str, Any], row_count: int) -> Any:

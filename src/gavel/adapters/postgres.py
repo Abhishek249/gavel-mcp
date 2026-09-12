@@ -18,9 +18,15 @@ class PostgresSettings:
 
     @classmethod
     def from_env(cls) -> PostgresSettings:
-        password = os.environ.get("PGPASSWORD") or os.environ.get("PROOFLINE_PG_PASSWORD")
+        password = (
+            os.environ.get("PGPASSWORD")
+            or os.environ.get("GAVEL_PG_PASSWORD")
+            or os.environ.get("PROOFLINE_PG_PASSWORD")
+        )
         if not password:
-            raise RuntimeError("PGPASSWORD or PROOFLINE_PG_PASSWORD is required for live Postgres access")
+            raise RuntimeError(
+                "PGPASSWORD, GAVEL_PG_PASSWORD, or PROOFLINE_PG_PASSWORD is required for live Postgres access"
+            )
         return cls(
             host=os.environ.get("PGHOST", "10.51.50.91"),
             port=int(os.environ.get("PGPORT", "5432")),
@@ -62,7 +68,7 @@ def _fetch_rows_psql(
     sql: str, params: dict[str, Any], settings: PostgresSettings
 ) -> list[dict[str, Any]]:
     if not shutil.which("psql"):
-        raise RuntimeError("install psycopg (`pip install proofline-mcp[live]`) or psql for Postgres access")
+        raise RuntimeError("install psycopg (`pip install gavel-mcp[live]`) or psql for Postgres access")
 
     rendered = sql
     for key, value in params.items():

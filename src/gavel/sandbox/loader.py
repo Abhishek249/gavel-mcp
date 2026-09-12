@@ -6,11 +6,11 @@ from pathlib import Path
 
 import yaml
 
-from proofline.sandbox.spec import SandboxSpec
+from gavel.sandbox.spec import SandboxSpec
 
 
 def default_sandbox_dir() -> Path:
-    env = os.environ.get("PROOFLINE_SANDBOX_DIR")
+    env = os.environ.get("GAVEL_SANDBOX_DIR") or os.environ.get("PROOFLINE_SANDBOX_DIR")
     if env:
         return Path(env).expanduser().resolve()
 

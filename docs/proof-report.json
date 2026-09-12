@@ -1,6 +1,6 @@
 {
   "proof": "PASS",
-  "boundary": "MCP stdio client -> Proofline MCP server -> validation engine",
+  "boundary": "MCP stdio client -> Gavel MCP server -> validation engine",
   "mcp_tool": "validate_candidate_pipeline",
   "scenarios_verified": 5,
   "results": [

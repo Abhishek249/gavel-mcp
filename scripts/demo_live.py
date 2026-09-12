@@ -29,10 +29,10 @@ async def pause(message: str, delay: float = 0.7) -> None:
 
 
 async def main() -> None:
-    await pause(f"{BOLD}{VIOLET}PROOFLINE MCP — LIVE VALIDATION{RESET}")
+    await pause(f"{BOLD}{VIOLET}GAVEL MCP — LIVE VALIDATION{RESET}")
     await pause("Starting MCP server over stdio ...")
 
-    server = StdioServerParameters(command=sys.executable, args=["-m", "proofline.server"])
+    server = StdioServerParameters(command=sys.executable, args=["-m", "gavel.server"])
     async with stdio_client(server) as (read, write), ClientSession(read, write) as session:
         await session.initialize()
         await pause(f"{GREEN}✓ MCP handshake complete{RESET}")

@@ -1,4 +1,4 @@
-from proofline.server import validate_candidate_pipeline
+from gavel.server import validate_candidate_pipeline
 
 
 def test_mcp_tool_returns_json_safe_report() -> None:

@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "proofline-mcp"
-version = "0.3.0"
-description = "An MCP validation control plane for agentically developed data pipelines."
+name = "gavel-mcp"
+version = "0.4.0"
+description = "Gavel — collect evidence, compare to golden, emit verdict. MCP server for agentic pipeline validation."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -29,14 +29,14 @@ live = [
 tlc = ["duckdb>=1.1,<2"]
 
 [project.scripts]
-proofline = "proofline.cli:main"
-proofline-mcp = "proofline.server:main"
+gavel = "gavel.cli:main"
+gavel-mcp = "gavel.server:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/proofline"]
+packages = ["src/gavel"]
 
 [tool.hatch.build.targets.wheel.force-include]
-"sandboxes" = "proofline/sandboxes"
+"sandboxes" = "gavel/sandboxes"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

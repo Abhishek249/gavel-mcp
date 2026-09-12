@@ -5,12 +5,12 @@ from typing import Any, Literal
 
 from mcp.server.fastmcp import FastMCP
 
-from proofline.geospatial import GeospatialRunEvidence, validate_geospatial_evidence
-from proofline.runner import run_validation
-from proofline.sandbox.loader import list_sandboxes
-from proofline.sandbox.runner import run_sandbox_validation
+from gavel.geospatial import GeospatialRunEvidence, validate_geospatial_evidence
+from gavel.runner import run_validation
+from gavel.sandbox.loader import list_sandboxes
+from gavel.sandbox.runner import run_sandbox_validation
 
-mcp = FastMCP("Proofline", json_response=True)
+mcp = FastMCP("Gavel", json_response=True)
 
 
 @mcp.tool()
@@ -38,7 +38,7 @@ def validate_geospatial_run(evidence: GeospatialRunEvidence) -> dict:
 
 @mcp.tool()
 def list_sandbox_definitions() -> dict:
-    """List declarative sandbox eval definitions shipped with Proofline."""
+    """List declarative sandbox eval definitions shipped with Gavel."""
     sandboxes = list_sandboxes()
     return {"count": len(sandboxes), "sandboxes": sandboxes}
 
@@ -67,7 +67,7 @@ def validate_sandbox_run(
 @mcp.tool()
 def collect_manual_report_candidate_row(manual_report_id: str) -> dict:
     """Collect live candidate evidence for a manual report from DevInt Postgres/WO/Dagster."""
-    from proofline.collectors.manual_report import collect_manual_report_candidate
+    from gavel.collectors.manual_report import collect_manual_report_candidate
 
     return collect_manual_report_candidate(manual_report_id)
 

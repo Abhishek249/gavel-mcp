@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import pytest
 
-from proofline.models import CheckStatus
-from proofline.sandbox.loader import (
+from gavel.models import CheckStatus
+from gavel.sandbox.loader import (
     list_sandboxes,
     load_dataset_rows,
     load_sandbox_spec,
     sandbox_dir_for,
 )
-from proofline.sandbox.runner import run_sandbox_validation
+from gavel.sandbox.runner import run_sandbox_validation
 
 
 def test_list_sandboxes_discovers_shipped_examples() -> None:
@@ -77,7 +77,7 @@ def test_q2755_passes_when_candidate_matches_golden() -> None:
 
 
 def test_validate_sandbox_run_mcp_tool() -> None:
-    from proofline.server import validate_sandbox_run
+    from gavel.server import validate_sandbox_run
 
     report = validate_sandbox_run(
         sandbox="manual-report-in1290",

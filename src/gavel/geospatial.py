@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from proofline.models import CheckResult, CheckStatus, ValidationReport
+from gavel.models import CheckResult, CheckStatus, ValidationReport
 
 
 class GeospatialRunEvidence(BaseModel):

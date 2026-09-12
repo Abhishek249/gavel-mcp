@@ -3,8 +3,8 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
-from proofline.models import CheckResult, CheckStatus
-from proofline.pipelines import PipelineOutput
+from gavel.models import CheckResult, CheckStatus
+from gavel.pipelines import PipelineOutput
 
 
 def _check(name: str, expected: Any, actual: Any, evidence: dict[str, Any]) -> CheckResult:

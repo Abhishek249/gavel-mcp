@@ -1,9 +1,9 @@
 # Verified benchmark — 2026-09-10
 
-This report records the first independently executed Proofline MCP benchmark on GitHub Actions.
+This report records the first independently executed Gavel MCP benchmark on GitHub Actions.
 
-- Workflow run: [34443656200](https://github.com/Abhishek249/proofline-mcp/actions/runs/34443656200)
-- Job: [102763697723](https://github.com/Abhishek249/proofline-mcp/actions/runs/34443656200/job/102763697723)
+- Workflow run: [34443656200](https://github.com/Abhishek249/gavel-mcp/actions/runs/34443656200)
+- Job: [102763697723](https://github.com/Abhishek249/gavel-mcp/actions/runs/34443656200/job/102763697723)
 - Commit tested: `e8dfff4816a5852cb85dd50f4a47d7900dd8a443`
 - Runner: GitHub-hosted Ubuntu 24.04, Python 3.12.14
 - Result: **PASS**
@@ -33,7 +33,7 @@ clean scenario, and four controlled defect classes.
 
 ## Scope
 
-These figures measure Proofline against its published deterministic benchmark on a GitHub-hosted
+These figures measure Gavel against its published deterministic benchmark on a GitHub-hosted
 runner. They establish reproducibility and behavior for the tested fault model. They do not establish
 performance or detection accuracy for arbitrary production pipelines. External geospatial-pipeline
 validation is a separate milestone.
