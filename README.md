@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/gavel-logo-tagline.png" alt="Gavel — collect evidence, compare to golden, emit verdict" width="480">
+  <img src="assets/gavel-readme-banner.png" alt="Gavel — collect evidence, compare to golden, emit verdict" width="480">
 </p>
 
 <p align="center"><em>Pronounced <strong>GAV-əl</strong> — like a judge’s gavel (two syllables, stress on the first).</em></p>
@@ -112,8 +112,8 @@ manual_report_id
 ```
 gavel-mcp/
 ├── assets/
-│   ├── gavel-logo-tagline.png  # README banner
-│   └── gavel-logo.png          # square icon (social preview)
+│   ├── gavel-readme-banner.png # README banner
+│   └── gavel-icon.png          # square icon (social preview)
 ├── sandboxes/
 │   ├── manual-report-in1290/   # Proof #2 golden + metrics
 │   └── q2755-dual-write/       # PH-2683-style shape drift
