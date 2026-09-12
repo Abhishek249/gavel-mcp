@@ -12,15 +12,24 @@
 #   PROOFLINE_DAGSTER_URL=http://10.51.50.91:3001
 set -euo pipefail
 
-MR_ID="${1:-}"
-if [[ -z "$MR_ID" ]]; then
-  echo "Usage: $0 <manual_report_id>" >&2
-  exit 2
-fi
-
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SANDBOX="${SANDBOX:-manual-report-in1290}"
 OUT="${OUT:-$ROOT/reports/manual-report-${MR_ID}.json}"
+
+if [[ -f "$ROOT/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$ROOT/.env"
+  set +a
+fi
+
+MR_ID="${1:-${PROOFLINE_MR_ID:-}}"
+
+if [[ -z "$MR_ID" ]]; then
+  echo "Usage: $0 <manual_report_id>" >&2
+  echo "Or set PROOFLINE_MR_ID in .env" >&2
+  exit 2
+fi
 
 mkdir -p "$(dirname "$OUT")"
 

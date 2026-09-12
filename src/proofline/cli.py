@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -9,6 +10,21 @@ from proofline.collectors.manual_report import collect_manual_report_candidate
 from proofline.runner import run_validation
 from proofline.sandbox.loader import list_sandboxes
 from proofline.sandbox.runner import run_sandbox_validation
+
+
+def _load_dotenv(path: Path | None = None) -> None:
+    env_path = path or Path(".env")
+    if not env_path.is_file():
+        return
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def _cmd_taxi(args: argparse.Namespace) -> None:
@@ -61,7 +77,28 @@ def _cmd_list_sandboxes(_: argparse.Namespace) -> None:
     print(json.dumps(list_sandboxes(), indent=2))
 
 
+def _cmd_smoke(_: argparse.Namespace) -> None:
+    from proofline.models import CheckStatus
+
+    report = run_sandbox_validation(
+        "manual-report-in1290",
+        params={"candidate_key": "f6b07a32-ff8b-45b2-a784-cd38ff2d7213"},
+    )
+    if report.status != CheckStatus.PASS:
+        print("smoke failed: manual-report-in1290 offline validation", file=sys.stderr)
+        sys.exit(1)
+    q2755 = run_sandbox_validation(
+        "q2755-dual-write",
+        params={"candidate_key": "3df9572e-73bf-45e6-86eb-fcc2e30d7ee0"},
+    )
+    if q2755.status != CheckStatus.FAIL:
+        print("smoke failed: q2755-dual-write should fail jaccard", file=sys.stderr)
+        sys.exit(1)
+    print('{"smoke":"pass","offline_sandboxes":["manual-report-in1290","q2755-dual-write"]}')
+
+
 def main() -> None:
+    _load_dotenv()
     parser = argparse.ArgumentParser(description="Proofline validation CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -109,6 +146,9 @@ def main() -> None:
 
     listing = subparsers.add_parser("list-sandboxes", help="List available sandbox definitions")
     listing.set_defaults(func=_cmd_list_sandboxes)
+
+    smoke = subparsers.add_parser("smoke", help="Offline sandbox smoke check")
+    smoke.set_defaults(func=_cmd_smoke)
 
     args = parser.parse_args()
     args.func(args)

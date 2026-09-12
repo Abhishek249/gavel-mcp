@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from unittest.mock import patch
 
 from proofline.collectors.manual_report import collect_manual_report_candidate
@@ -76,6 +77,21 @@ def test_live_sandbox_validation_uses_collector(mock_collect) -> None:
     assert report.status == CheckStatus.PASS
     assert report.context["live"] is True
     mock_collect.assert_called_once_with(manual_report_id)
+
+
+def test_cli_smoke_command() -> None:
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [sys.executable, "-m", "proofline.cli", "smoke"],
+        cwd=str(Path(__file__).resolve().parents[1]),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert '"smoke":"pass"' in result.stdout
 
 
 def test_geospatial_accepts_succeeded_worker_status() -> None:
