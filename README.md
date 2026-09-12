@@ -2,8 +2,6 @@
   <img src="assets/gavel-readme-banner.png" alt="Gavel — collect evidence, compare to golden, emit verdict" width="480">
 </p>
 
-<p align="center"><em>Pronounced <strong>GAV-əl</strong> — like a judge’s gavel (two syllables, stress on the first).</em></p>
-
 <p align="center">
   Declarative sandbox evals for agent-built data pipelines. Golden vs candidate datasets,
   deterministic metrics (Jaccard, exact, area ratio), and a local MCP server your coding agent can call.
