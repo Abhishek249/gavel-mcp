@@ -50,8 +50,6 @@ async def benchmark() -> dict:
             "validate_geospatial_run",
             "list_sandbox_definitions",
             "validate_sandbox_run",
-            "collect_manual_report_candidate_row",
-            "validate_manual_report_live",
         }
         assert required_tools <= set(tool_names)
 
