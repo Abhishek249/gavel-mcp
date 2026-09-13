@@ -33,8 +33,6 @@ def _cmd_taxi(args: argparse.Namespace) -> None:
 
 def _cmd_sandbox(args: argparse.Namespace) -> None:
     params = json.loads(args.params) if args.params else {}
-    if args.live:
-        params["live"] = True
     report = run_sandbox_validation(
         args.name,
         params=params,
@@ -52,17 +50,11 @@ def _cmd_list_sandboxes(_: argparse.Namespace) -> None:
 def _cmd_smoke(_: argparse.Namespace) -> None:
     from gavel.models import CheckStatus
 
-    report = run_sandbox_validation(
-        "taxi-clean",
-        params={"candidate_key": "trip-0000000"},
-    )
+    report = run_sandbox_validation("taxi-clean")
     if report.status != CheckStatus.PASS:
         print("smoke failed: taxi-clean offline validation", file=sys.stderr)
         sys.exit(1)
-    dup = run_sandbox_validation(
-        "taxi-duplicate-rows",
-        params={"candidate_key": "trip-0000000"},
-    )
+    dup = run_sandbox_validation("taxi-duplicate-rows")
     if dup.status != CheckStatus.FAIL:
         print("smoke failed: taxi-duplicate-rows should fail", file=sys.stderr)
         sys.exit(1)

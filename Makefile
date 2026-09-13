@@ -38,13 +38,10 @@ demo:
 	$(BIN)/python scripts/demo_live.py
 
 sandbox-offline:
-	$(BIN)/gavel sandbox $(SANDBOX) \
-		--params '{"candidate_key":"trip-0000000"}'
+	$(BIN)/gavel sandbox $(SANDBOX)
 
 sandbox-fail:
-	$(BIN)/gavel sandbox taxi-duplicate-rows \
-		--params '{"candidate_key":"trip-0000000"}' \
-		|| test $$? -eq 1
+	$(BIN)/gavel sandbox taxi-duplicate-rows || test $$? -eq 1
 
 smoke: lint test prove sandbox-offline sandbox-fail
 	@echo "smoke: PASS (offline)"
