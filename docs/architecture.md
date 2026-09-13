@@ -1,6 +1,6 @@
 # Gavel architecture
 
-Gavel separates **judgment** (deterministic eval) from **collection** (adapters that talk to your infra).
+Gavel separates **judgment** (deterministic eval) from **collection** (evidence gathering).
 
 ```
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
@@ -25,28 +25,23 @@ Gavel separates **judgment** (deterministic eval) from **collection** (adapters 
 | Layer | Package | Role |
 |-------|---------|------|
 | Spec | `gavel/sandbox/` | Load `sandboxes/*/sandbox.yaml`, align rows, run metrics |
-| Adapters | `gavel/adapters/` | Postgres, WO HTTP, Dagster GraphQL (live only) |
-| Collectors | `gavel/collectors/` | Compose adapter output into candidate evidence rows |
-| Verdict | `gavel/geospatial.py`, `validators.py` | Legacy single-stage checks |
+| Verdict | `gavel/geospatial.py`, `validators.py` | Specialized checks |
 | MCP | `gavel/server.py` | Expose tools over stdio |
 
-## Manual report DevInt flow
+## NYC taxi sandbox flow
 
 ```
-UI trigger → manual_report_id
+Agent decides to validate
        │
        ▼
-collect_manual_report_candidate()
-  ├─ Postgres: boundary_result, gap_count, aggregated_fov_wkt
-  ├─ WO: autofov-{mr}, lisa-{mr}
-  └─ Dagster: materialization metadata (tile_count, postgres_written, …)
+validate_sandbox_run("taxi-clean")
+  ├─ Load golden: sandboxes/taxi-clean/golden/trips.json
+  ├─ Load candidate: sandboxes/taxi-clean/candidate/trips.json
+  └─ Run metrics: row_count, total_fare, unique_trip_count
        │
        ▼
-validate_sandbox_run("manual-report-in1290", live=true)
-  └─ compare candidate vs golden/proof2.json → ValidationReport
+ValidationReport → PASS/FAIL
 ```
-
-Poll Dagster with WO **`adapter_run_id`**, not WO `run_id`.
 
 ## MCP tools
 
@@ -55,6 +50,4 @@ Poll Dagster with WO **`adapter_run_id`**, not WO `run_id`.
 | `validate_candidate_pipeline` | No |
 | `validate_geospatial_run` | No |
 | `list_sandbox_definitions` | No |
-| `validate_sandbox_run` | No (unless you pass live params) |
-| `collect_manual_report_candidate_row` | Yes (DevInt) |
-| `validate_manual_report_live` | Yes (DevInt) |
+| `validate_sandbox_run` | No |
