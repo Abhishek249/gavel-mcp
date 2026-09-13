@@ -64,31 +64,6 @@ def validate_sandbox_run(
     return report.model_dump(mode="json")
 
 
-@mcp.tool()
-def collect_manual_report_candidate_row(manual_report_id: str) -> dict:
-    """Collect live candidate evidence for a manual report from DevInt Postgres/WO/Dagster."""
-    from gavel.collectors.manual_report import collect_manual_report_candidate
-
-    return collect_manual_report_candidate(manual_report_id)
-
-
-@mcp.tool()
-def validate_manual_report_live(
-    manual_report_id: str,
-    sandbox: str = "manual-report-in1290",
-) -> dict:
-    """Live-collect manual report evidence and validate against the sandbox golden dataset."""
-    report = run_sandbox_validation(
-        sandbox,
-        params={
-            "live": True,
-            "manual_report_id": manual_report_id,
-            "candidate_key": manual_report_id,
-        },
-    )
-    return report.model_dump(mode="json")
-
-
 def main() -> None:
     mcp.run(transport="stdio")
 

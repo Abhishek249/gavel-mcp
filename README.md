@@ -17,7 +17,7 @@
 
 ## 🚀 Quick start
 
-Prerequisites: **Python 3.11+**. Live DevInt validation also needs network access to `10.51.50.91`.
+Prerequisites: **Python 3.11+**.
 
 ```bash
 git clone https://github.com/Abhishek249/gavel-mcp.git
@@ -26,21 +26,14 @@ make install          # creates .venv, copies .env.example → .env
 make smoke            # lint + 22 tests + MCP prove + offline sandboxes — no secrets
 ```
 
-**Keys, honestly:**
-
-| What | Credentials |
-|------|-------------|
-| `make smoke`, `pytest`, offline sandboxes | **None** — runs fully local |
-| Live manual-report collect/validate | **`PGPASSWORD`** (+ optional WO/Dagster URLs; defaults to DevInt `.91`) |
-| MCP in Cursor | Point at `.venv/bin/gavel-mcp` — see [`docs/mcp-setup.md`](docs/mcp-setup.md) |
-| SQL Server dual-write (PH-2683) | **Not wired yet** — use offline `q2755-dual-write` sandbox |
+**Try it:**
 
 ```bash
-# Offline — IN-1290 Proof #2 golden vs packaged candidate (expect PASS)
-make sandbox-offline
+# Clean NYC taxi data (expect PASS)
+gavel sandbox taxi-clean --params '{"candidate_key":"trip-0000000"}'
 
-# Live — after setting PGPASSWORD in .env
-make validate-mr
+# Taxi data with duplicate rows (expect FAIL)
+gavel sandbox taxi-duplicate-rows --params '{"candidate_key":"trip-0000000"}'
 ```
 
 ## 📚 Releases (what shipped when)
@@ -77,33 +70,31 @@ Restart Cursor after editing MCP config. Walkthrough: [`docs/mcp-setup.md`](docs
 
 - **Declarative sandboxes** — YAML spec: components, golden/candidate datasets, metric rubric
 - **Deterministic metrics** — `exact`, `jaccard`, `area_ratio`, `not_null`, `row_count`, `gte`, `lte`
-- **Silent-success detection** — green Dagster run but no `boundary_result` row, no polygon, no Postgres write
-- **Shipped examples** — `manual-report-in1290` (Proof #2 PASS), `q2755-dual-write` (shape drift FAIL)
-- **Live DevInt adapters** — Postgres + WO + Dagster GraphQL for manual-report runs
+- **Silent-success detection** — catches green orchestration with missing/wrong data
+- **Shipped examples** — NYC taxi clean data (PASS), duplicate rows (FAIL)
 - **Structured evidence reports** — every check: name, expected, actual, status, context
 - **MCP stdio boundary** — real client/server tests in CI (`prove_it.py`, benchmark)
 
-Stack: Python, Pydantic, Shapely, PyYAML, MCP SDK, optional psycopg.
+Stack: Python, Pydantic, Shapely, PyYAML, MCP SDK.
 
 ## 🏗️ Architecture
 
 ```
-sandbox.yaml  →  golden.json + candidate (file | live collect)
+sandbox.yaml  →  golden.json + candidate.json (file | inline | live)
                       ↓
                  metric engine (deterministic)
                       ↓
                  ValidationReport  →  MCP tool response
 ```
 
-Manual report on DevInt (IN-1290):
+Example: NYC taxi duplicate-row detection
 
 ```
-manual_report_id
-    → collect: Postgres + WO (autofov-{mr}, lisa-{mr}) + Dagster (adapter_run_id)
-    → validate: compare vs sandboxes/manual-report-in1290/golden/proof2.json
+trip_id
+    → load golden: 500 clean trips
+    → load candidate: 600 trips (100 duplicates)
+    → validate: row_count, key_uniqueness, fare_total → FAIL
 ```
-
-**Rule:** poll Dagster with WO **`adapter_run_id`**, not WO `run_id`.
 
 ## 📂 Project structure
 
@@ -113,8 +104,8 @@ gavel-mcp/
 │   ├── gavel-readme-banner.png # README banner
 │   └── gavel-icon.png          # square icon (social preview)
 ├── sandboxes/
-│   ├── manual-report-in1290/   # Proof #2 golden + metrics
-│   └── q2755-dual-write/       # PH-2683-style shape drift
+│   ├── taxi-clean/             # Clean NYC taxi data (PASS)
+│   └── taxi-duplicate-rows/    # Duplicate detection (FAIL)
 ├── src/gavel/
 │   ├── server.py               # MCP stdio server (6 tools)
 │   ├── cli.py                  # gavel CLI
@@ -141,10 +132,8 @@ make install           # venv + pip install -e ".[dev,live]"
 make test              # pytest
 make smoke             # lint + test + prove + offline sandboxes
 make prove             # MCP boundary script
-make sandbox-offline   # IN-1290 Proof #2 offline validation
-make sandbox-q2755     # dual-write drift (expect fail)
-make validate-mr       # live DevInt (needs .env + PGPASSWORD)
-make collect-mr        # live collect only
+make sandbox-offline   # taxi-clean validation (expect PASS)
+make sandbox-fail      # taxi-duplicate-rows (expect FAIL)
 make demo              # interactive MCP demo
 make mcp-config        # Cursor MCP JSON snippet
 make lint              # ruff
@@ -155,18 +144,14 @@ CLI equivalents:
 ```bash
 gavel list-sandboxes
 gavel smoke
-gavel sandbox manual-report-in1290 --params '{"candidate_key":"f6b07a32-..."}'
-gavel validate-manual-report f6b07a32-ff8b-45b2-a784-cd38ff2d7213
+gavel sandbox taxi-clean --params '{"candidate_key":"trip-0000000"}'
+gavel sandbox taxi-duplicate-rows --params '{"candidate_key":"trip-0000000"}'
 ```
 
 ## 🛠️ Troubleshooting
 
-- **`PGPASSWORD is required`**: copy `.env.example` → `.env`, set DevInt Postgres password.
-- **`manual_report not found`**: wrong UUID or MR deleted from DevInt.
-- **Live PASS but you expected FAIL**: golden snapshot may be stale — capture a new golden or compare different MR.
 - **MCP tools missing in Cursor**: run `make mcp-config`, use absolute paths, restart Cursor.
-- **WO SUCCEEDED but geospatial check failed**: Gavel now accepts `SUCCEEDED`; re-run `make smoke`.
-- **Dagster poll fails**: use `adapter_run_id` from WO job, not WO `run_id`.
+- **Sandbox not found**: check `sandboxes/` directory structure and YAML syntax.
 
 ## 📊 Taxi benchmark (v0.1)
 
@@ -182,8 +167,8 @@ These numbers apply to the **published taxi fault model**, not arbitrary product
 
 ## Roadmap
 
-- [x] Sandbox eval platform + live DevInt manual-report collector
-- [ ] SQL Server adapter for PH-2683 Q2755 dual-write
+- [x] Sandbox eval platform with NYC taxi examples
+- [ ] Live adapters for production data warehouses
 - [ ] Signed evidence bundles · OTel traces · PR gates
 
 ---

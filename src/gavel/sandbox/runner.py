@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-from gavel.collectors.manual_report import collect_manual_report_candidate
 from gavel.models import CheckResult, CheckStatus, ValidationReport
 from gavel.sandbox.loader import load_dataset_rows, load_sandbox_spec, sandbox_dir_for
 from gavel.sandbox.metrics import evaluate_metric
@@ -19,15 +18,8 @@ def _maybe_collect_live_candidate(
 ) -> list[dict[str, Any]] | None:
     if candidate_rows is not None:
         return candidate_rows
-    if not params.get("live"):
-        return None
-    manual_report_id = params.get("manual_report_id") or params.get("candidate_key")
-    if sandbox_name == "manual-report-in1290" and manual_report_id:
-        return [collect_manual_report_candidate(str(manual_report_id))]
-    raise ValueError(
-        "params.live=true requires a supported collector; "
-        "manual-report-in1290 needs params.manual_report_id or params.candidate_key"
-    )
+    # Live collection can be added here for specific sandboxes
+    return None
 
 
 def _select_row(

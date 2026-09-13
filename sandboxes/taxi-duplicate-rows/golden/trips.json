@@ -1,0 +1,9 @@
+{
+  "rows": [
+    {
+      "trip_count": 500,
+      "total_fare": 19653.48,
+      "unique_trip_count": 500
+    }
+  ]
+}

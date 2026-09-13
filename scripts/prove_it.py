@@ -33,8 +33,6 @@ async def prove() -> dict:
             "validate_geospatial_run",
             "list_sandbox_definitions",
             "validate_sandbox_run",
-            "collect_manual_report_candidate_row",
-            "validate_manual_report_live",
         } <= tool_names
 
         for name, (faults, expected_status, required_failures) in SCENARIOS.items():
@@ -101,10 +99,7 @@ async def prove() -> dict:
 
         response = await session.call_tool(
             "validate_sandbox_run",
-            {
-                "sandbox": "manual-report-in1290",
-                "params": {"candidate_key": "f6b07a32-ff8b-45b2-a784-cd38ff2d7213"},
-            },
+            {"sandbox": "taxi-clean"},
         )
         assert not response.isError
         assert response.content and hasattr(response.content[0], "text")
@@ -112,7 +107,7 @@ async def prove() -> dict:
         assert report["status"] == "pass"
         observed.append(
             {
-                "scenario": "sandbox_manual_report_in1290",
+                "scenario": "sandbox_taxi_clean",
                 "expected": "pass",
                 "actual": report["status"],
                 "failed_checks": report.get("failed_checks", []),

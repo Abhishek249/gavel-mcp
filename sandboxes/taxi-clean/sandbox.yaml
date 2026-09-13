@@ -1,0 +1,35 @@
+name: taxi-clean
+version: "1"
+description: >
+  NYC taxi benchmark — clean candidate vs golden reference.
+  Validates row counts and aggregate metrics.
+
+components:
+  data_warehouse:
+    type: postgres
+    description: TLC taxi trips table
+
+datasets:
+  golden:
+    source: file
+    path: golden/trips.json
+  candidate:
+    source: file
+    path: candidate/trips.json
+
+metrics:
+  - name: row_count
+    golden: golden.trip_count
+    candidate: candidate.trip_count
+    fn: exact
+
+  - name: total_fare
+    golden: golden.total_fare
+    candidate: candidate.total_fare
+    fn: exact
+    tolerance: 0.01
+
+  - name: unique_trip_count
+    golden: golden.unique_trip_count
+    candidate: candidate.unique_trip_count
+    fn: exact

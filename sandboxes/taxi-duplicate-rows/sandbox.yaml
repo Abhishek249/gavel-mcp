@@ -1,0 +1,35 @@
+name: taxi-duplicate-rows
+version: "1"
+description: >
+  NYC taxi benchmark — duplicate rows injected in candidate.
+  Tests defect detection: row count, key uniqueness, fare rollup all fail.
+
+components:
+  data_warehouse:
+    type: postgres
+    description: TLC taxi trips table
+
+datasets:
+  golden:
+    source: file
+    path: golden/trips.json
+  candidate:
+    source: file
+    path: candidate/trips_with_duplicates.json
+
+metrics:
+  - name: row_count
+    golden: golden.trip_count
+    candidate: candidate.trip_count
+    fn: exact
+
+  - name: total_fare
+    golden: golden.total_fare
+    candidate: candidate.total_fare
+    fn: exact
+    tolerance: 0.01
+
+  - name: key_uniqueness
+    golden: golden.unique_trip_count
+    candidate: candidate.unique_trip_count
+    fn: exact
